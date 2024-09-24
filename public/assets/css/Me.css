@@ -1,0 +1,41 @@
+body {
+  overflow-x: hidden;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding-top: 60px;
+  transition: all 0.3s;
+  transform: translateX(-100%);
+  /* Hide sidebar by default */
+}
+
+.sidebar.active {
+  transform: translateX(0);
+  /* Show sidebar when active */
+}
+
+.main-content {
+  margin-left: 0;
+  
+  padding: 20px;
+  transition: margin-left 0.3s;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+      transform: translateX(0);
+      /* Always show sidebar on desktop */
+  }
+
+  .main-content {
+      margin-left: 250px;
+      /* Adjust margin for main content on desktop */
+  }
+}
