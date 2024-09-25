@@ -25,7 +25,7 @@
         </button>
         <div class="d-flex justify-content-between w-100 align-items-center">
 
-            <h4 class="mt-2 mx-3"><a class="navbar-brand" href="<?= base_url('/') ?>">Mebel's</a></h4>
+            <h4 class="mt-2 mx-3"><a class="navbar-brand" href="<?= base_url('/') ?>">PDOP</a></h4>
             <h6 class="p-2 mt-1 font-weight-light">Logged as : <span class="font-weight-bold">Legimin</span></h6>
         </div>
 
@@ -45,7 +45,7 @@
                     <a class="nav-link" href="<?= base_url('MyHome/OnlyMe/recivedmessage/') ?>">List Pesan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('MyHome/OnlyMe/recivedmessage/') ?>">Logout</a>
+                    <a class="nav-link" href="<?= base_url('logout') ?>">Logout</a>
                 </li>
             </ul>
         </div>
