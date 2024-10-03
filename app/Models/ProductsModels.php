@@ -21,8 +21,6 @@ class ProductsModels extends Model
         if (!$produk) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Produk dengan nama $nama_produk tidak ditemukan.");
         }
-
-
         return $produk;
     }
 }

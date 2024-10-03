@@ -15,6 +15,7 @@
                 </button>
             </div>
             <form action="<?= base_url('/AddProduct') ?>" method="post" enctype="multipart/form-data">
+                <?= csrf_field(); ?>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
                         <label for="name" class="form-label">Nama Produk</label>

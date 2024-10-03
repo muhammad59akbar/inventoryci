@@ -16,23 +16,23 @@
             <form>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
-                        <label for="name" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="name">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="email">
 
                     </div>
                     <div class="d-flex flex-column">
-                        <label for="name" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="name">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" aria-describedby="username">
 
                     </div>
                     <div class="d-flex flex-column">
-                        <label for="name" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="name">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" aria-describedby="password">
 
                     </div>
                     <div class="d-flex flex-column">
-                        <label for="name" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="name">
+                        <label for="namalengkap" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="namalengkap" aria-describedby="namalengkap">
 
                     </div>
                     <div class="my-2">

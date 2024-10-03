@@ -10,39 +10,50 @@
     <?php endif; ?>
     <?= $this->include('AddProduct'); ?>
     <div class="d-flex flex-wrap justify-content-center justify-content-lg-start ">
-        <?php foreach ($listprdk as $prdk) :  ?>
-            <div class="card m-2" style="width: 18rem;">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhh7W3SdWTKhe1dpHaMCi7C_4J1dUajSspLevOjJBdlDuQHvI2CR0peusIp-hSmvb3958nODcxf9K9engP-2EIvtSk4BqMi1ovTjYxyQN2qZZeQ10uRI9ymeSH5hefKmnncoLwdcCVX0Q/s1600/Minyak+kelapa.jpg" class="card-img-top p-1" alt="..." style="height: 250px;">
-                <div class="card-body">
-                    <h5 class="card-title" style="height: 50px;"><?= $prdk['nama_produk'] ?></h5>
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <p class="card-text">Harga</p>
-                        </div>
-                        <div class="col-8">
-                            <p class="card-text">: Rp. 8.000/Pcs</p>
-                        </div>
+        <?php if (!empty($listprdk)) : ?>
+            <?php foreach ($listprdk as $prdk) :  ?>
+                <div class="card m-2" style="width: 18rem;">
+                    <img src="<?= base_url('assets/images/product/') . $prdk['img_prdk'] ?>" class="card-img-top p-1" alt="..." style="height: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="height: 50px;"><?= $prdk['nama_produk'] ?></h5>
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <p class="card-text">Harga</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="card-text">: Rp. 8.000/Pcs</p>
+                            </div>
 
-                        <div class="col-4">
-                            <p class="card-text">Stock</p>
+                            <div class="col-4">
+                                <p class="card-text">Stock</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="card-text">: <?= $prdk['stock_prdk'] ?></p>
+                            </div>
                         </div>
-                        <div class="col-8">
-                            <p class="card-text">: <?= $prdk['stock_prdk'] ?></p>
-                        </div>
+                        <a href="<?= base_url('/detailProduct/' . url_title($prdk['nama_produk'], '-', true)); ?>" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <form class="d-inline" method="post" action="<?= base_url('/DeleteProduk/' . $prdk['id_produk']) ?>">
+                            <?= csrf_field(); ?>
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('apakah anda yakin ingin menghapus produk ini ???')"><i class="bi bi-archive-fill"></i></i></button>
+                        </form>
+
+
+
                     </div>
-                    <a href="<?= base_url('/detailProduct/' . url_title($prdk['nama_produk'], '-', true)); ?>" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                    <a href="#" class="btn btn-danger"><i class="bi bi-archive-fill"></i></i></a>
-
-
-
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p class="mt-1">Data Produk Tidak Tersedia !!!</p>
+        <?php endif ?>
 
 
 
     </div>
 </div>
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof ClassicEditor !== 'undefined') {
@@ -56,6 +67,4 @@
         }
     });
 </script>
-
-
 <?= $this->endSection(); ?>
