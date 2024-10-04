@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?> - Toko Mebel</title>
+    <title><?= $title ?></title>
     <link rel="stylesheet" href="<?= base_url('assets/css/Me.css') ?>" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -25,8 +25,8 @@
         </button>
         <div class="d-flex justify-content-between w-100 align-items-center">
 
-            <h4 class="mt-2 mx-3"><a class="navbar-brand" href="<?= base_url('/') ?>">PDOP</a></h4>
-            <h6 class="p-2 mt-1 font-weight-light">Logged as : <span class="font-weight-bold">Legimin</span></h6>
+            <h4 class="mt-2 mx-3 "><a class="navbar-brand" href="<?= base_url('/') ?>">PT. PDOP</a></h4>
+            <h6 class="p-2 mt-1 font-weight-light">Logged as : <span class="font-weight-bold"><?= user()->username; ?></span></h6>
         </div>
 
     </nav>
@@ -38,6 +38,11 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="<?= base_url('/') ?>">Dashboard</a>
                 </li>
+                <?php if (in_groups('Own')) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('/ListUser') ?>">List User</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('/ListProduct') ?>">List Product</a>
                 </li>
@@ -53,7 +58,8 @@
 
     <?= $this->renderSection('content'); ?>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="<?= base_url('assets/js/script.js') ?>"></script>
@@ -63,6 +69,13 @@
                 $('#sidebar').toggleClass('active');
                 $('#mainContent').toggleClass('active-content');
             });
+        });
+        $(document).ready(function() {
+            <?php if (session('errors')) : ?>
+                $('#productModal').modal('show');
+                $('#modalus').modal('show');
+
+            <?php endif; ?>
         });
     </script>
 </body>
