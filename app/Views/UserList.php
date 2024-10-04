@@ -5,6 +5,8 @@
     <hr>
 
     <?= $this->include('AddUser'); ?>
+
+
     <table class="table table-striped table-bordered">
         <thead>
             <tr class="text-center">
@@ -16,21 +18,25 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-center">
-                <th>1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>
-                    <a href="" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                    <form class="d-inline">
-                        <input type="hidden">
-                        <button type="submit" class="btn btn-danger"><i class="bi bi-archive-fill"></i></button>
-                    </form>
-                </td>
-            </tr>
+            <?php $no = 1; ?>
+            <?php foreach ($userspdop as $users) : ?>
+                <tr class="text-center">
+                    <th><?= $no++ ?></th>
+                    <td><?= $users['email'] ?></td>
+                    <td><?= $users['fullname'] ?></td>
+                    <td><?= $users['role'] ?></td>
+                    <td>
+                        <a href="<?= base_url() . $users['id'] ?>" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                        <form class="d-inline">
+                            <input type="hidden">
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-archive-fill"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
 
         </tbody>
+
     </table>
 </div>
 

@@ -31,7 +31,7 @@
                     </div>
                     <div class="mb-2 ">
                         <label for="imageprdk" class="form-label">Gambar Produk</label>
-                        <input class="form-control" type="file" id="imageprdk" name="imageprdk" onclick="changeImage()">
+                        <input class="form-control" type="file" id="imageprdk" name="imageprdk" onchange="changeImage(this, 'prevImage')">
                     </div>
 
                     <div class="mb-3 mt-4">

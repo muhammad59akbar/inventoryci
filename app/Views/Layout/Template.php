@@ -73,6 +73,8 @@
         $(document).ready(function() {
             <?php if (session('errors')) : ?>
                 $('#productModal').modal('show');
+                $('#modalus').modal('show');
+
             <?php endif; ?>
         });
     </script>
