@@ -7,12 +7,15 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Admin::index');
 
-$routes->get('/ListUser', 'Admin::ListUser',  ['filter' => 'role:Own']);
-$routes->post('/Admin/AddUser', 'Admin::AddUser',  ['filter' => 'role:Own']);
+$routes->get('/ListUser', 'Admin::ListUser',  ['filter' => 'role:Owner']);
+$routes->post('/Admin/AddUser', 'Admin::AddUser',  ['filter' => 'role:Owner']);
+$routes->get('/DetailUser/(:segment)', 'Admin::detailUser/$1',  ['filter' => 'role:Owner']);
+$routes->post('/EditUser/(:num)', 'Admin::editUser/$1',  ['filter' => 'role:Owner']);
+$routes->delete('/DeleteUser/(:num)', 'Admin::deleteUser/$1',  ['filter' => 'role:Owner']);
 
 
-$routes->get('/ListProduct', 'Product::index',  ['filter' => 'role:Own, StaffAdm']);
-$routes->post('/AddProduct', 'Product::AddProduct',  ['filter' => 'role:Own, StaffAdm']);
-$routes->get('/detailProduct/(:segment)', 'Product::detailProduk/$1',  ['filter' => 'role:Own, StaffAdm']);
-$routes->post('/EditProduct/(:num)', 'Product::editProduct/$1',  ['filter' => 'role:Own, StaffAdm']);
-$routes->delete('/DeleteProduk/(:num)', 'Product::deleteProduct/$1',  ['filter' => 'role:Own, StaffAdm']);
+$routes->get('/ListProduct', 'Product::index',  ['filter' => 'role:Owner, Staff Admin']);
+$routes->post('/AddProduct', 'Product::AddProduct',  ['filter' => 'role:Owner, Staff Admin']);
+$routes->get('/detailProduct/(:segment)', 'Product::detailProduk/$1',  ['filter' => 'role:Owner, Staff Admin']);
+$routes->post('/EditProduct/(:num)', 'Product::editProduct/$1',  ['filter' => 'role:Owner, Staff Admin']);
+$routes->delete('/DeleteProduk/(:num)', 'Product::deleteProduct/$1',  ['filter' => 'role:Owner, Staff Admin']);

@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\ProductsModels;
 use Myth\Auth\Models\UserModel;
 use Myth\Auth\Models\GroupModel;
 use Myth\Auth\Password;
@@ -21,6 +20,7 @@ class Admin extends BaseController
     }
     public function index(): string
     {
+
         $data = [
             'title' => 'tester',
         ];
@@ -40,6 +40,7 @@ class Admin extends BaseController
     public function AddUser()
     {
         $validationRules = [
+
             'email' => [
                 'rules' => 'required|is_unique[users.email]',
                 'errors' => [
@@ -48,7 +49,7 @@ class Admin extends BaseController
                 ]
             ],
             'username' => [
-                'rules' => 'required|min_length[5]|max_length[30]|is_unique[users.email]',
+                'rules' => 'required|min_length[5]|max_length[30]|regex_match[/^[a-zA-Z0-9\s]+$/]|is_unique[users.username]',
                 'errors' => [
                     'is_unique' => '{field} already registered.'
                 ]
@@ -72,7 +73,8 @@ class Admin extends BaseController
 
                 ]
 
-            ]
+            ],
+
 
         ];
         if (!$this->validate($validationRules)) {
@@ -98,6 +100,7 @@ class Admin extends BaseController
             'image_name' => $NFotoKaryawan
         ];
         $userID = $this->UserModel->insert($data);
+
         if ($userID) {
             $role = $this->request->getPost('role');
             $this->GroupModel->addUserToGroup($userID, $role);
@@ -105,5 +108,126 @@ class Admin extends BaseController
         } else {
             return redirect()->back()->with('message', 'Gagal menambahkan user.');
         }
+    }
+
+    public function detailUser($url): string
+    {
+
+
+        $data = [
+            'title' => 'Detail User - ' .   $this->UserModel->GetUserbyURL($url)['fullname'],
+            'user' => $this->UserModel->GetUserbyURL($url),
+            'roles' =>  $this->GroupModel->select('id, name')->findAll(),
+            'errors' => \Config\Services::validation()
+
+        ];
+        return view('EditUser', $data);
+    }
+
+    public function editUser($id_user)
+    {
+        $validationRules = [
+            'email' => [
+                'rules' => 'required|is_unique[users.email,  id,' . $id_user . ']',
+                'errors' => [
+                    'required' => '{field} Wajib diisi',
+                    'is_unique' => '{field} Sudah Ada !!!',
+                ]
+            ],
+            'username' => [
+                'rules' => 'required|min_length[5]|max_length[30]|regex_match[/^[a-zA-Z0-9\s]+$/]|is_unique[users.username,  id,' . $id_user . ']',
+                'errors' => [
+                    'is_unique' => '{field} already registered.'
+                ]
+            ],
+            'password' => 'permit_empty|min_length[5]',
+            'namalengkap' => [
+                'rules' => 'required|min_length[3]|max_length[100]|regex_match[/^[a-zA-Z0-9\s]+$/]|',
+                'errors' => [
+                    'required' => 'Nama Wajib diisi',
+                    'min_length' => 'Nama Minimal 3 Karakter',
+                    'regex_match' => 'Nama Harap Diisi Dengan Benar !!!'
+                ]
+            ],
+            'imagekaryawan' => [
+                'rules' => 'max_size[imagekaryawan,1024]|is_image[imagekaryawan]|mime_in[imagekaryawan,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'this file very big',
+                    'is_image' => 'this is not image',
+                    'mime_in' => 'this is not image',
+
+                ]
+
+            ],
+            'role' => 'required'
+
+
+        ];
+
+        if (!$this->validate($validationRules)) {
+
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $imageKaryawan = $this->request->getFile('imagekaryawan');
+        $imageOldKaryawan = $this->request->getPost('fotoOld');
+
+        if ($imageKaryawan->getError() == 4) {
+            $nameImage = $imageOldKaryawan;
+        } else if ($imageOldKaryawan == 'default.webp') {
+
+            $nameImage =   $imageKaryawan->getRandomName();
+            $imageKaryawan->move('assets/images/karyawan/', $nameImage);
+        } else {
+            $nameImage = $imageKaryawan->getRandomName();
+            $imageKaryawan->move('assets/images/karyawan/', $nameImage);
+            unlink('assets/images/karyawan/' . $imageOldKaryawan);
+        }
+
+        $password = $this->request->getPost('password');
+        $checkpassword = $this->UserModel->find($id_user);
+        $nama_user = $this->request->getPost('namalengkap');
+        $url = str_replace(' ', '-', $nama_user);
+
+        if (!empty($password)) {
+            $newpassword = Password::hash($password, PASSWORD_BCRYPT);
+        } else {
+            $newpassword = $checkpassword->password_hash;
+        }
+
+        $data = [
+            'id' => $id_user,
+            'email' => $this->request->getPost('email'),
+            'username' => $this->request->getPost('username'),
+            'fullname' =>  $nama_user,
+            'image_name' => $nameImage,
+            'password_hash' =>  $newpassword,
+        ];
+        // tambahin validasi id di usermodelnya
+        $this->UserModel->save($data);
+
+        $role = $this->request->getPost('role');
+        $this->GroupModel->updateUserGroup($id_user, $role);
+        \Config\Services::cache()->clean();
+        return redirect()->to('/DetailUser/' . $url)->with('message', 'Data pengguna berhasil diubah!');
+    }
+
+    public function deleteUser($id_user)
+    {
+
+
+        $user = $this->UserModel->find($id_user);
+        if ($user) {
+            $role = $this->GroupModel->getGroupsForUser($id_user);
+            foreach ($role as $r) {
+                $this->GroupModel->removeUserFromGroup($id_user, $r['group_id']);
+            }
+            if ($user->image_name != 'default.webp') {
+                unlink('assets/images/karyawan/' . $user->image_name);
+            }
+        }
+        $this->UserModel->delete($id_user, true);
+
+        return redirect()->to('/ListUser')->with('message', 'Data pengguna berhasil diHapus !!!');
     }
 }

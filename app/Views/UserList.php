@@ -7,6 +7,7 @@
     <?= $this->include('AddUser'); ?>
 
 
+
     <table class="table table-striped table-bordered">
         <thead>
             <tr class="text-center">
@@ -19,17 +20,19 @@
         </thead>
         <tbody>
             <?php $no = 1; ?>
+
             <?php foreach ($userspdop as $users) : ?>
                 <tr class="text-center">
                     <th><?= $no++ ?></th>
                     <td><?= $users['email'] ?></td>
                     <td><?= $users['fullname'] ?></td>
-                    <td><?= $users['role'] ?></td>
+                    <td><?= $users['roles'] ?></td>
                     <td>
-                        <a href="<?= base_url() . $users['id'] ?>" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                        <form class="d-inline">
-                            <input type="hidden">
-                            <button type="submit" class="btn btn-danger"><i class="bi bi-archive-fill"></i></button>
+                        <a href="<?= base_url('/DetailUser/' . url_title($users['fullname'], '-', true)); ?>" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                        <form class="d-inline" method="post" action="<?= base_url('/DeleteUser/' . $users['id']) ?>">
+
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('apakah anda yakin ingin menghapus Pengguna ini ???')"><i class="bi bi-archive-fill"></i></button>
                         </form>
                     </td>
                 </tr>

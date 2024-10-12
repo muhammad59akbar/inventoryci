@@ -63,7 +63,10 @@
                     </div>
                     <div class="mb-2 ">
                         <label for="imgKaryawan" class="form-label">Foto</label>
-                        <input class="form-control" type="file" id="imgKaryawan" name="imgKaryawan" onchange="changeImage(this, 'prevImageKaryawan')">
+                        <input class="form-control <?= session('errors.namalengkap') ? 'is-invalid' : '' ?>" type="file" id="imgKaryawan" name="imgKaryawan" onchange="changeImage(this, 'prevImageKaryawan')">
+                        <div class="invalid-feedback">
+                            <?= session('errors.imgKaryawan') ?>
+                        </div>
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label">Role</label>

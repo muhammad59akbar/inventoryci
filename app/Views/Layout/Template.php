@@ -38,7 +38,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="<?= base_url('/') ?>">Dashboard</a>
                 </li>
-                <?php if (in_groups('Own')) : ?>
+                <?php if (in_groups(['Owner', 'Staff Admin'])) : ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= base_url('/ListUser') ?>">List User</a>
                     </li>
