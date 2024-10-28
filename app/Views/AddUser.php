@@ -20,6 +20,7 @@
                 </button>
             </div>
             <form action="<?= base_url('/Admin/AddUser') ?>" method="post" enctype="multipart/form-data">
+                <?= csrf_field(); ?>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
                         <label for="email" class="form-label">Email</label>
@@ -72,7 +73,7 @@
                         <label class="form-label">Role</label>
                         <select class="form-select" aria-label="Default select example" name="role">
                             <option value="1">Owner</option>
-                            <option value="2">Staff</option>
+                            <option value="2">Staff Admin</option>
                             <option value="3">Sales</option>
                             <option value="4" selected>Kurir</option>
                         </select>

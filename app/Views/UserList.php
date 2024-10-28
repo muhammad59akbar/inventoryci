@@ -43,4 +43,14 @@
     </table>
 </div>
 
+<script>
+    $(document).ready(function() {
+        <?php if (session('errors')) : ?>
+
+            $('#modalus').modal('show');
+
+        <?php endif; ?>
+    });
+</script>
+
 <?= $this->endSection(); ?>

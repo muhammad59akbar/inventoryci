@@ -1,8 +1,9 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#productModal">
-    <i class="bi bi-file-earmark-plus-fill"></i> New Product
-</button>
-
+<?php if (in_groups(['Owner', 'Staff Admin'])) : ?>
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#productModal">
+        <i class="bi bi-file-earmark-plus-fill"></i> New Product
+    </button>
+<?php endif; ?>
 
 <!-- Modal -->
 <div class="modal" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -14,7 +15,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('/AddProduct') ?>" method="post" enctype="multipart/form-data">
+            <form id="formproduk" action="<?= base_url('/AddProduct') ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
@@ -36,7 +37,7 @@
 
                     <div class="mb-3 mt-4">
                         <label for="desc_prdk">Deskripsi Produk</label>
-                        <textarea name="desc_prdk" class=" <?= session('errors.desc_prdk') ? 'is-invalid' : '' ?>" id="desc_prdk" style="display: none;"><?= old('jmlh_produk') ?></textarea>
+                        <textarea name="desc_prdk" class=" <?= session('errors.desc_prdk') ? 'is-invalid' : '' ?>" id="desc_prdk" style="display: none;"><?= old('desc_prdk') ?></textarea>
                         <div class="invalid-feedback">
                             <?= session('errors.desc_prdk') ?>
                         </div>

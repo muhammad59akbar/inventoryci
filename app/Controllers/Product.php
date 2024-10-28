@@ -2,14 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Models\ApproveModels;
 use App\Models\ProductsModels;
 
 class Product extends BaseController
 {
     protected $ProdukModel;
+    protected $ApproveModel;
     public function __construct()
     {
         $this->ProdukModel = new ProductsModels();
+        $this->ApproveModel = new ApproveModels();
     }
 
     public function index(): string
@@ -78,7 +81,7 @@ class Product extends BaseController
 
 
         if (!$this->validate($validationRules)) {
-
+            session()->setFlashdata('modal', 'product');
             return redirect()->to('/ListProduct')->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -94,7 +97,7 @@ class Product extends BaseController
         $data = [
             'nama_produk' => $this->request->getPost('namaproduct'),
             'deskrip_produk' => $this->request->getPost('desc_prdk'),
-            'hrg_prdk' => $this->request->getPost('hargaproduk'),
+            'hrg_prdk' => str_replace('.', '', $this->request->getPost('hargaproduk')),
             'stock_prdk' => $this->request->getPost('jmlh_produk'),
             'img_prdk' =>  $NImageProduk
         ];
@@ -104,8 +107,6 @@ class Product extends BaseController
 
     public function editProduct($id_produk)
     {
-
-
         $validationRules = [
             'namaproduct' => [
                 'rules' => 'required|min_length[3]|max_length[100]|regex_match[/^[a-zA-Z0-9\s]+$/]|is_unique[produk_items.nama_produk, id_produk,' . $id_produk . ']',
@@ -172,7 +173,7 @@ class Product extends BaseController
             'id_produk' => $id_produk,
             'nama_produk' => $nama_produk,
             'deskrip_produk' => $this->request->getPost('desc_prdk'),
-            'hrg_prdk' => $this->request->getPost('hargaproduk'),
+            'hrg_prdk' => str_replace('.', '', $this->request->getPost('hargaproduk')),
             'stock_prdk' => $this->request->getPost('jmlh_produk'),
             'img_prdk' =>  $nameImage
         ];
@@ -193,5 +194,61 @@ class Product extends BaseController
         $this->ProdukModel->delete($produk);
 
         return redirect()->to('/ListProduct')->with('message', 'Data berhasil dihapus !!!');
+    }
+
+
+    public function orderProduk()
+    {
+        $productId = $this->request->getPost('id_produk');
+        $produk = $this->ProdukModel->find($productId);
+        $jmlhPesan = $this->request->getPost('jmlh_pesan');
+        $totalHarga = $jmlhPesan * $produk['hrg_prdk'];
+        if ($jmlhPesan > $produk['stock_prdk']) {
+            session()->setFlashdata('modal', 'order');
+            session()->setFlashdata('product_id', $productId);
+            return redirect()->back()->withInput()->with('errors', ['jmlh_pesan' => 'Jumlah pesanan melebihi stok yang tersedia.']);
+        }
+
+        $validationRules = [
+            'nama_psn' => [
+                'rules' => 'required|regex_match[/^[a-zA-Z0-9\s]+$/]',
+                'errors' => [
+                    'required' => 'Nama Pemesan Wajib Diisi !!!',
+                    'regex_match' => 'Nama Pemesan Harap Diisi Dengan Benar !!!'
+                ]
+            ],
+            'alamat_psn' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Alamat Pemesanan Wajib Diisi !!!'
+                ]
+            ],
+            'jmlh_pesan' => [
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Jumlah Pesanan Harus Diisi !!!',
+
+                ]
+            ],
+        ];
+
+        if (!$this->validate($validationRules)) {
+            session()->setFlashdata('modal', 'order');
+            session()->setFlashdata('product_id', $productId);
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'id_produk' => $productId,
+            'nama_pemesan' => $this->request->getPost('nama_psn'),
+            'alamat_pemesanan' => $this->request->getPost('alamat_psn'),
+            'jumlah_pesanan' =>    $jmlhPesan,
+            'total_harga' => $totalHarga,
+            'ordered_by' => user_id()
+        ];
+        $this->ApproveModel->save($data);
+        $newStock = $produk['stock_prdk'] - $jmlhPesan;
+        $this->ProdukModel->update($productId, ['stock_prdk' => $newStock]);
+        return redirect()->to('/ListOrder')->with('message', 'Pesanan Anda Sudah Di Pesan Tunggu Disetujui Terlebih dahulu !!!');
     }
 }
