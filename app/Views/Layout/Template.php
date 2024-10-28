@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="<?= base_url('assets/css/Me.css') ?>" />
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script type="text/javascript" src="<?= base_url('assets') ?>/plugins/ckeditor5/ckeditor.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <style>
     .ck-editor__editable {
@@ -47,7 +46,10 @@
                     <a class="nav-link" href="<?= base_url('/ListProduct') ?>">List Product</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('MyHome/OnlyMe/recivedmessage/') ?>">List Pesan</a>
+                    <a class="nav-link" href="<?= base_url('/ListOrder') ?>">List Pesan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('/ListPengiriman') ?>">List Pengiriman</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('logout') ?>">Logout</a>
@@ -58,7 +60,7 @@
 
     <?= $this->renderSection('content'); ?>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -69,13 +71,6 @@
                 $('#sidebar').toggleClass('active');
                 $('#mainContent').toggleClass('active-content');
             });
-        });
-        $(document).ready(function() {
-            <?php if (session('errors')) : ?>
-                $('#productModal').modal('show');
-                $('#modalus').modal('show');
-
-            <?php endif; ?>
         });
     </script>
 </body>

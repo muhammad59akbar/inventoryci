@@ -214,8 +214,6 @@ class Admin extends BaseController
 
     public function deleteUser($id_user)
     {
-
-
         $user = $this->UserModel->find($id_user);
         if ($user) {
             $role = $this->GroupModel->getGroupsForUser($id_user);

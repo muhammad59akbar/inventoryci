@@ -14,6 +14,7 @@ function changeImage(input, previewId) {
 
 function changeInputRP() {
 	const inputHarga = document.getElementById("harga");
+   
 	inputHarga.addEventListener("keyup", function(e) {
         let nilai = this.value.replace(/[^,\d]/g, "").toString();
         let split = nilai.split(",");
@@ -29,6 +30,8 @@ function changeInputRP() {
         rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
         this.value = rupiah;
     });
+  
+
 
 }
 

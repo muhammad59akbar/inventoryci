@@ -10,7 +10,7 @@
             <?= session()->getFlashdata('message') ?>
         </div>
     <?php endif; ?>
-    <form action="<?= base_url('/EditProduct/' . $product['id_produk']) ?>" method="post" enctype="multipart/form-data">
+    <form id="formproduk" action="<?= base_url('/EditProduct/' . $product['id_produk']) ?>" method="post" enctype="multipart/form-data">
         <?= csrf_field(); ?>
         <div class="container mt-3">
             <div class="d-flex flex-column">
@@ -48,7 +48,7 @@
             </div>
             <div class="mb-3">
                 <label for="harga" class="form-label">Harga Produk</label>
-                <input type="text" class="form-control <?= session('errors.hargaproduk') ? 'is-invalid' : '' ?>" id="harga" name="hargaproduk" placeholder="Masukkan harga" onfocus="changeInputRP()" value="<?= $product['hrg_prdk'] ?>">
+                <input type="text" class="form-control <?= session('errors.hargaproduk') ? 'is-invalid' : '' ?>" id="harga" name="hargaproduk" placeholder="Masukkan harga" onfocus="changeInputRP()" value="<?= number_format($product['hrg_prdk'], 0, ',', '.') ?>">
                 <div class="invalid-feedback">
                     <?= session('errors.hargaproduk') ?>
                 </div>
