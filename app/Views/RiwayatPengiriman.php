@@ -3,7 +3,7 @@
 
 
 <div class="main-content mt-5" id="mainContent">
-    <h2 class="mt-2">List Pengiriman</h2>
+    <h2 class="mt-2">Riwayat Pengiriman</h2>
     <hr>
     <?php if (session()->getFlashdata('message')) : ?>
         <div class="alert alert-success m-2" role="alert">
@@ -13,15 +13,15 @@
 
     <?php
 
-    $Delivery = false;
+    $SDelivery = false;
     foreach ($listpngirim as $pengirim) {
-        if ($pengirim['status'] === 'Delivery') {
-            $Delivery = true;
+        if ($pengirim['status'] === 'Delivered Successfully') {
+            $SDelivery = true;
             break;
         }
     }
     ?>
-    <?php if (!empty($Delivery)) : ?>
+    <?php if (!empty($SDelivery)) : ?>
 
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
@@ -33,15 +33,12 @@
                         <th scope="col">Alamat Pemesan</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
-
-
-
                     </tr>
                 </thead>
                 <tbody>
                     <?php $no = 1; ?>
                     <?php foreach ($listpngirim as $pengirim) : ?>
-                        <?php if ($pengirim['status'] === 'Delivery') : ?>
+                        <?php if ($pengirim['status'] === 'Delivered Successfully') : ?>
 
 
                             <tr class="text-center">
@@ -55,8 +52,8 @@
                                     <?php if (in_groups(['Owner', 'Kurir'])) : ?>
                                         <?= view('DeliveryItem', ['pengirim' => $pengirim]); ?>
                                     <?php endif ?>
-                                    <a href="<?= base_url('/DetailPengiriman/' . $pengirim['no_resi']) ?>" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a>
-                                    <?php if (in_groups(['Owner', 'Staff Admin'])) : ?>
+                                    <a href="<?= base_url('/DetailRiwayatPengiriman/' . $pengirim['no_resi']) ?>" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a>
+                                    <?php if (in_groups(['Owner'])) : ?>
                                         <form class="d-inline" method="post" action="">
 
                                             <input type="hidden" name="_method" value="DELETE">
@@ -73,19 +70,11 @@
 
             </table>
         <?php else : ?>
-            <p class="mt-1">Data Pengiriman Tidak Tersedia !!!</p>
+            <p class="mt-1">Data Riwayat Pengiriman Tidak Tersedia !!!</p>
         <?php endif ?>
         </div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        <?php if (session('errors')) : ?>
-            var deliveryID = '<?= session('deliveryID') ?>';
-            $('#delivery-items-' + deliveryID).modal('show');
-        <?php endif; ?>
-    });
-</script>
 
 
 <?= $this->endSection(); ?>

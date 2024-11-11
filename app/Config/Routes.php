@@ -21,10 +21,13 @@ $routes->post('/EditProduct/(:num)', 'Product::editProduct/$1',  ['filter' => 'r
 $routes->delete('/DeleteProduk/(:num)', 'Product::deleteProduct/$1',  ['filter' => 'role:Owner, Staff Admin']);
 $routes->post('/OrderProduk', 'Product::orderProduk',   ['filter' => 'role:Owner, Staff Admin, Sales']);
 
-
-
 $routes->get('/ListOrder', 'Order::index');
 $routes->post('/ApproveOrder', 'Order::ApproveItems');
 $routes->get('/DetailOrder/(:segment)', 'Order::detailPesanan/$1');
 $routes->delete('/DeleteOrder/(:num)', 'Order::deleteOrder/$1');
-$routes->get('/ListPengiriman', 'Order::ListPengiriman');
+$routes->get('/ListPengiriman', 'Delivery::ListPengiriman');
+$routes->get('/DetailPengiriman/(:segment)', 'Delivery::detailPengiriman/$1');
+$routes->get('/RiwayatPengiriman', 'Delivery::RiwayatPengiriman');
+$routes->get('/DetailRiwayatPengiriman/(:segment)', 'Delivery::detailRiwayatPengiriman/$1');
+
+$routes->post('/ApproveDelivery', 'Delivery::ApprovePengiriman');

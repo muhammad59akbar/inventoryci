@@ -1,5 +1,5 @@
 <?php if ($order['status'] === 'Pending') : ?>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#approve-items-<?= $order['id_approve'] ?>">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approve-items-<?= $order['id_approve'] ?>">
         <i class="bi bi-pencil-square"></i>
     </button>
 <?php endif ?>

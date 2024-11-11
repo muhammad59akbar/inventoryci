@@ -34,7 +34,7 @@ class Order extends BaseController
     public function detailPesanan($url_order)
     {
         $data = [
-            'title' => 'Detaial Pesanan ' . $this->ApproveModel->getOrder($url_order)['nama_pemesan'],
+            'title' => 'Detail Pesanan ' . $this->ApproveModel->getOrder($url_order)['nama_pemesan'],
             'DetailItem' => $this->ApproveModel->getOrder($url_order)
         ];
         return view('DetailPesanan', $data);
@@ -93,22 +93,35 @@ class Order extends BaseController
         ];
         $this->ApproveModel->save($data);
 
+
+
+
+
         $dataTanggal = date('dMY');
         $randomAngka = str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT);
         $noresi = $orderID . $dataTanggal . $randomAngka;
+
 
         $this->DeliveryModel->save([
             'id_approve' => $orderID,
             'no_resi' =>   $noresi,
         ]);
+
+
         return redirect()->to('/ListOrder')->with('message', 'Pesanan Anda Sudah Di Setujui, Mohon Ditunggu Sampai Pengiriman Tiba !!!');
     }
 
     public function deleteOrder($id_order)
     {
         $order = $this->ApproveModel->find($id_order);
-        $produk = $this->ProdukModel->find($id_order);
+        if (!$order) {
+            return redirect()->to('/ListOrder')->with('message', 'Data pesanan tidak ditemukan!');
+        }
+
+        $produk = $this->ProdukModel->find($order['id_produk']);
+
         $newstock = $order['jumlah_pesanan'] + $produk['stock_prdk'];
+
         $this->ProdukModel->update($produk['id_produk'], ['stock_prdk' => $newstock]);
         $this->ApproveModel->delete($id_order);
         return redirect()->to('/ListOrder')->with('message', 'Data berhasil dihapus !!!');

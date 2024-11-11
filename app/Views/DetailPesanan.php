@@ -5,6 +5,7 @@
     <h2 class="mt-3">Detail Pesanan</h2>
 
     <a href="<?= base_url('/ListOrder/') ?>" class="m-2">&laquo; Kembali</a>
+
     <hr>
     <div class="container">
         <div class="row">
