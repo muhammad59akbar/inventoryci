@@ -4,26 +4,78 @@ namespace App\Controllers;
 
 use Myth\Auth\Models\UserModel;
 use Myth\Auth\Models\GroupModel;
+use App\Models\ProductsModels;
+use App\Models\ApproveModels;
+use App\Models\DeliveryModels;
 use Myth\Auth\Password;
 
 class Admin extends BaseController
 {
     protected $ProdukModel;
     protected $UserModel;
+    protected $DeliveryModel;
     protected $GroupModel;
+    protected $ApproveModel;
 
     public function __construct()
     {
-
+        $this->ProdukModel = new ProductsModels();
+        $this->ApproveModel = new ApproveModels();
+        $this->DeliveryModel = new DeliveryModels();
         $this->UserModel = new UserModel();
         $this->GroupModel = new GroupModel();
     }
     public function index(): string
     {
 
+        $userID = user_id();
+
+        if (in_groups(['Owner', 'Staff Admin'])) {
+            $totalUser = $this->UserModel->countAllResults();
+            $totalPesanan = $this->ApproveModel->where('status', 'Pending')->countAllResults();
+
+            $totalPengiriman = $this->DeliveryModel->where('status', 'Delivery')->countAllResults();
+            $totalSelesai = $this->DeliveryModel->where('status', 'Delivered Successfully')->countAllResults();
+            $totalKeuntungan = $this->ApproveModel->selectSum('total_harga')->where('status', 'Approved')->get()->getRow();
+        } elseif (in_groups(['Sales'])) {
+            $totalUser = null;
+            $totalPesanan = $this->ApproveModel->where('status', 'Pending')->where('ordered_by', $userID)->countAllResults();
+            $totalPengiriman = $this->DeliveryModel
+                ->join('approve_items', 'approve_items.id_approve = resPengiriman.id_approve')
+                ->where('resPengiriman.status', 'Delivery')
+                ->where('approve_items.ordered_by', $userID)
+                ->countAllResults();
+            $totalSelesai =  $this->DeliveryModel
+                ->join('approve_items', 'approve_items.id_approve = resPengiriman.id_approve')
+                ->where('resPengiriman.status', 'Delivered Successfully')
+                ->where('approve_items.ordered_by', $userID)->countAllResults();
+            $totalKeuntungan = null;
+        } else {
+            $totalUser = null;
+            $totalPesanan = null;
+            $totalPengiriman = $this->DeliveryModel
+                ->join('approve_items', 'approve_items.id_approve = resPengiriman.id_approve')
+                ->where('resPengiriman.status', 'Delivery')
+                ->where('approve_items.id_kurir', $userID)
+                ->countAllResults();
+            $totalSelesai =  $this->DeliveryModel
+                ->join('approve_items', 'approve_items.id_approve = resPengiriman.id_approve')
+                ->where('resPengiriman.status', 'Delivered Successfully')
+                ->where('approve_items.id_kurir', $userID)->countAllResults();
+            $totalKeuntungan = null;
+        }
+
         $data = [
-            'title' => 'tester',
+            'title' => 'Dashboard',
+            'totalUser' => $totalUser,
+            'totalProduk' => $this->ProdukModel->countAllResults(),
+            'totalPesanan' => $totalPesanan,
+            'totalPengiriman' => $totalPengiriman,
+            'totalSelesai' =>  $totalSelesai,
+            'totalKeuntungan' =>  $totalKeuntungan
         ];
+        // dd($data);
+
         return view('Dashboard', $data);
     }
 
