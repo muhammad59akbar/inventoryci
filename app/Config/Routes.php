@@ -22,7 +22,7 @@ $routes->delete('/DeleteProduk/(:num)', 'Product::deleteProduct/$1',  ['filter' 
 $routes->post('/OrderProduk', 'Product::orderProduk',   ['filter' => 'role:Owner, Staff Admin, Sales']);
 
 $routes->get('/ListOrder', 'Order::index');
-$routes->post('/ApproveOrder', 'Order::ApproveItems');
+$routes->post('/ApproveOrder', 'Order::ApproveItems', ['filter' => 'role:Owner, Staff Admin']);
 $routes->get('/DetailOrder/(:segment)', 'Order::detailPesanan/$1');
 $routes->delete('/DeleteOrder/(:num)', 'Order::deleteOrder/$1');
 $routes->get('/ListPengiriman', 'Delivery::ListPengiriman');

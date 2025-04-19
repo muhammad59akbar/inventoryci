@@ -201,7 +201,7 @@ class Product extends BaseController
     {
         $productId = $this->request->getPost('id_produk');
         $produk = $this->ProdukModel->find($productId);
-        $jmlhPesan = $this->request->getPost('jmlh_pesan');
+        $jmlhPesan = (int)$this->request->getPost('jmlh_pesan');
         $totalHarga = $jmlhPesan * $produk['hrg_prdk'];
         if ($jmlhPesan > $produk['stock_prdk']) {
             session()->setFlashdata('modal', 'order');

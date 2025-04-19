@@ -92,11 +92,6 @@ class Order extends BaseController
             'approved_by' => user_id(),
         ];
         $this->ApproveModel->save($data);
-
-
-
-
-
         $dataTanggal = date('dMY');
         $randomAngka = str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT);
         $noresi = $orderID . $dataTanggal . $randomAngka;
